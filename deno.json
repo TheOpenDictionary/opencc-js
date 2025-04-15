@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": ["deno.ns", "dom", "dom.iterable", "esnext"],
+    "strict": true
+  },
+  "imports": {
+    "opencc-js/": "./src/"
+  },
+  "tasks": {
+    "test": "deno test --allow-read test/deno/"
+  }
+}

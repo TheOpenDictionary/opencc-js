@@ -1,6 +1,6 @@
 # opencc-js [![](https://badge.fury.io/js/opencc-js.svg)](https://www.npmjs.com/package/opencc-js) [![](https://github.com/nk2028/opencc-js/workflows/Test/badge.svg)](https://github.com/nk2028/opencc-js/actions?query=workflow%3ATest) [![](https://data.jsdelivr.com/v1/package/npm/opencc-js/badge)](https://www.jsdelivr.com/package/npm/opencc-js)
 
-The JavaScript version of Open Chinese Convert (OpenCC)
+The JavaScript/TypeScript version of Open Chinese Convert (OpenCC)
 
 [繁體版](README-zh-TW.md) - [简体版](README-zh-CN.md)
 
@@ -11,18 +11,20 @@ The JavaScript version of Open Chinese Convert (OpenCC)
 Import in HTML pages:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script>     <!-- Full version -->
-<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/cn2t.js"></script>     <!-- For Simplified to Traditional -->
-<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/t2cn.js"></script>     <!-- For Traditional Chinese to Simplified Chinese -->
+<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/main.js"></script>     <!-- Core functionality -->
+<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/full.js"></script>     <!-- Full version -->
+<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/cn2t.js"></script>     <!-- For Simplified to Traditional -->
+<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/t2cn.js"></script>     <!-- For Traditional Chinese to Simplified Chinese -->
 ```
 
-ES6 import
+ES Modules import
 
 ```html
 <script type="module">
-  import * as OpenCC from './dist/esm/full.js'; // Full version
-  import * as OpenCC from './dist/esm/cn2t.js'; // For Simplified to Traditional
-  import * as OpenCC from './dist/esm/t2cn.js'; // For Traditional Chinese to Simplified Chinese
+  import * as OpenCC from 'https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/main.mjs'; // Core functionality
+  import * as OpenCC from 'https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/full.mjs'; // Full version
+  import * as OpenCC from 'https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/cn2t.mjs'; // For Simplified to Traditional
+  import * as OpenCC from 'https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/t2cn.mjs'; // For Traditional Chinese to Simplified Chinese
 </script>
 ```
 
@@ -30,6 +32,8 @@ ES6 import
 
 ```sh
 npm install opencc-js
+# or with pnpm
+pnpm add opencc-js
 ```
 
 CommonJS
@@ -42,6 +46,18 @@ ES Modules
 
 ```javascript
 import * as OpenCC from 'opencc-js';
+```
+
+**Import opencc-js in Deno**
+
+```typescript
+import * as OpenCC from 'npm:opencc-js';
+```
+
+Or directly from GitHub:
+
+```typescript
+import * as OpenCC from 'https://raw.githubusercontent.com/nk2028/opencc-js/main/src/main.ts';
 ```
 
 ## Usage
@@ -79,16 +95,16 @@ console.log(converter('香蕉 蘋果 梨')); // output: banana apple pear
 
 ```javascript
 const customDict = [
-  ['“', '「'],
-  ['”', '」'],
-  ['‘', '『'],
-  ['’', '』'],
+  ['"', '「'],
+  ['"', '」'],
+  [''', '『'],
+  [''', '』'],
 ];
 const converter = OpenCC.ConverterFactory(
   OpenCC.Locale.from.cn,                   // Simplified Chinese (Mainland China) => OpenCC standard
   OpenCC.Locale.to.tw.concat([customDict]) // OpenCC standard => Traditional Chinese (Taiwan) with custom words
 );
-console.log(converter('悟空道：“师父又来了。怎么叫做‘水中捞月’？”'));
+console.log(converter('悟空道："师父又来了。怎么叫做'水中捞月'？"'));
 // output: 悟空道：「師父又來了。怎麼叫做『水中撈月』？」
 ```
 
@@ -96,17 +112,17 @@ This will get the same result with an extra convertion.
 
 ```javascript
 const customDict = [
-  ['“', '「'],
-  ['”', '」'],
-  ['‘', '『'],
-  ['’', '』'],
+  ['"', '「'],
+  ['"', '」'],
+  [''', '『'],
+  [''', '』'],
 ];
 const converter = OpenCC.ConverterFactory(
   OpenCC.Locale.from.cn, // Simplified Chinese (Mainland China) => OpenCC standard
   OpenCC.Locale.to.tw,   // OpenCC standard => Traditional Chinese (Taiwan)
   [customDict]           // Traditional Chinese (Taiwan) => custom words
 );
-console.log(converter('悟空道：“师父又来了。怎么叫做‘水中捞月’？”'));
+console.log(converter('悟空道："师父又来了。怎么叫做'水中捞月'？"'));
 // output: 悟空道：「師父又來了。怎麼叫做『水中撈月』？」
 ```
 
@@ -159,4 +175,44 @@ import * as Locale from 'opencc-js/preset'; // dictionary
 
 const converter = OpenCC.ConverterFactory(Locale.from.hk, Locale.to.cn);
 console.log(converter('漢語'));
+```
+
+## Development
+
+This project uses modern tooling:
+
+* **TypeScript** for type safety
+* **Vite** for fast bundling
+* **Vitest** for testing
+
+### Setup
+
+```bash
+# Install dependencies
+pnpm install
+
+# Build the project
+pnpm build
+
+# Run tests
+pnpm test           # Run Node.js tests
+pnpm test:browser   # Run browser tests
+pnpm test:deno      # Run Deno tests
+pnpm test:all       # Run all tests
+```
+
+### Project Structure
+
+```
+opencc-js/
+├── src/             # Source code
+│   ├── main.ts      # Core functionality
+│   ├── full.ts      # Full functionality
+│   ├── cn2t.ts      # Simplified to Traditional
+│   └── t2cn.ts      # Traditional to Simplified
+├── test/            # Test files
+│   ├── basic.test.ts    # Node.js tests
+│   ├── browser.test.ts  # Browser tests
+│   └── deno/            # Deno tests
+└── dist/            # Built files (generated)
 ```

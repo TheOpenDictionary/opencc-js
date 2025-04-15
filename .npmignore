@@ -2,6 +2,11 @@
 /build.js
 /buildAndTest.sh
 /rollup.config.js
+/vite.config.ts
+/vitest.config.ts
+/tsconfig.json
 /main.js
 /full.js
 /test
+/node_modules
+/coverage

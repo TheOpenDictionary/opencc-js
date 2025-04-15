@@ -1,14 +1,15 @@
 import fs from 'fs';
 import { variants2standard, standard2variants, presets } from './src/data-config.js';
 import { fileURLToPath } from 'url';
+import path from 'path';
 
-function getAbsPath(relativePath) {
+function getAbsPath(relativePath: string): string {
   return fileURLToPath(new URL(relativePath, import.meta.url));
 }
 
-const fileContentCache = {};
+const fileContentCache: Record<string, string> = {};
 
-function loadFile(fileName) {
+function loadFile(fileName: string): string {
   if (!fileContentCache[fileName]) {
     fileContentCache[fileName] = fs
       .readFileSync(`node_modules/opencc-data/data/${fileName}.txt`, {
@@ -21,9 +22,16 @@ function loadFile(fileName) {
         const v = vs.split(' ')[0]; // only select the first candidate, the subsequent candidates are ignored
         return [k, v];
       })
-      .filter(([k, v]) => k !== v || k.length > 1) // remove “char => the same char” convertions to reduce file size
+      .filter(([k, v]) => k !== v || k.length > 1) // remove "char => the same char" convertions to reduce file size
       .map(([k, v]) => k + ' ' + v)
       .join('|');
+
+    // Ensure directory exists
+    const outputDir = path.dirname(getAbsPath(`./dist/esm-lib/dict/${fileName}.js`));
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+
     const outputFile = getAbsPath(`./dist/esm-lib/dict/${fileName}.js`);
     const outputCode = `export default "${fileContentCache[fileName]}";\n`;
     fs.writeFileSync(outputFile, outputCode);
@@ -31,12 +39,18 @@ function loadFile(fileName) {
   return fileContentCache[fileName];
 }
 
-function getPresetCode(cfg) {
-  const code = { import: [], from: [], to: [] };
+interface PresetConfig {
+  from: string[];
+  to: string[];
+  filename?: string;
+}
+
+function getPresetCode(cfg: PresetConfig): string {
+  const code = { import: [] as string[], from: [] as string[], to: [] as string[] };
   ['from', 'to'].forEach(type => {
-    cfg[type].forEach(loc => {
+    cfg[type as keyof Pick<PresetConfig, 'from' | 'to'>].forEach(loc => {
       code.import.push(`import ${type}_${loc} from "../${type}/${loc}.js";`);
-      code[type].push(`${loc}: ${type}_${loc}`);
+      code[type as keyof Pick<typeof code, 'from' | 'to'>].push(`${loc}: ${type}_${loc}`);
     });
   });
   return `${code.import.join('\n')}
@@ -92,6 +106,3 @@ presets.forEach(o => {
     getPresetCode(o)
   );
 });
-
-// copy src/core.js to dist/core.js
-fs.copyFileSync('src/main.js', 'dist/esm-lib/core.js');

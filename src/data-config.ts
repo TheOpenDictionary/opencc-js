@@ -1,4 +1,4 @@
-export const variants2standard = {
+export const variants2standard: Record<string, string[]> = {
   cn: ['STCharacters', 'STPhrases'],
   hk: ['HKVariantsRev', 'HKVariantsRevPhrases'],
   tw: ['TWVariantsRev', 'TWVariantsRevPhrases'],
@@ -6,7 +6,7 @@ export const variants2standard = {
   jp: ['JPVariantsRev', 'JPShinjitaiCharacters', 'JPShinjitaiPhrases'],
 };
 
-export const standard2variants = {
+export const standard2variants: Record<string, string[]> = {
   cn: ['TSCharacters', 'TSPhrases'],
   hk: ['HKVariants'],
   tw: ['TWVariants'],
@@ -14,7 +14,13 @@ export const standard2variants = {
   jp: ['JPVariants'],
 };
 
-export const presets = [
+interface PresetConfig {
+  filename: string;
+  from: string[];
+  to: string[];
+}
+
+export const presets: PresetConfig[] = [
   {
     filename: 'full',
     from: Object.keys(variants2standard),
