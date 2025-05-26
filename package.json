@@ -31,10 +31,8 @@
   "scripts": {
     "prepare-data": "bun scripts/download-data.ts && bun scripts/build-locales.ts",
     "build": "tsup src --outDir dist --format esm --dts",
-    "test:node": "vitest run --environment node test/basic.test.ts",
-    "test:browser": "vitest run --environment jsdom test/browser.test.ts",
-    "test": "pnpm test:node",
-    "test:all": "pnpm test:node && pnpm test:browser && pnpm test:deno",
+    "bench": "bun scripts/benchmark.ts", 
+    "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "dev": "vite",
     "preview": "vite preview",
