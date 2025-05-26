@@ -29,16 +29,10 @@
     }
   },
   "scripts": {
-    "prepare-data": "node --loader ts-node/esm build.ts",
-    "build:main": "vite build",
-    "build:cn2t": "vite build --config vite.cn2t.config.ts",
-    "build:t2cn": "vite build --config vite.t2cn.config.ts",
-    "build:full": "vite build --config vite.full.config.ts",
-    "build:types": "tsc --emitDeclarationOnly --skipLibCheck",
-    "build": "pnpm prepare-data && pnpm build:main && pnpm build:cn2t && pnpm build:t2cn && pnpm build:full && pnpm build:types",
+    "prepare-data": "bun scripts/download-data.ts && bun scripts/build-locales.ts",
+    "build": "tsup src --outDir dist --format esm --dts",
     "test:node": "vitest run --environment node test/basic.test.ts",
     "test:browser": "vitest run --environment jsdom test/browser.test.ts",
-    "test:deno": "deno test --allow-read test/deno/",
     "test": "pnpm test:node",
     "test:all": "pnpm test:node && pnpm test:browser && pnpm test:deno",
     "test:coverage": "vitest run --coverage",
@@ -51,7 +45,7 @@
     "type": "git",
     "url": "git+https://github.com/nk2028/opencc-js.git"
   },
-  "author": "The nk2028 Project",
+  "author": "The Open Dictionary",
   "keywords": [
     "opencc",
     "Chinese",
@@ -66,21 +60,21 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nk2028/opencc-js/issues"
+    "url": "https://github.com/TheOpenDictionary/opencc-js/issues"
   },
   "homepage": "https://github.com/nk2028/opencc-js#readme",
   "devDependencies": {
+    "@types/bun": "latest",
     "@types/node": "^22.14.1",
     "@vitest/browser": "^3.1.1",
     "@vitest/coverage-v8": "^3.1.1",
-    "chai": "~4.3.10",
     "jsdom": "^26.1.0",
-    "opencc-data": "~1.0.8",
-    "rollup-plugin-generate-package-json": "^3.2.0",
+    "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
+    "tsup": "^8.5.0",
     "typescript": "^5.8.3",
     "vite": "^6.2.6",
     "vitest": "^3.1.1"
   },
-  "packageManager": "pnpm@10.8.1+sha512.c50088ba998c67b8ca8c99df8a5e02fd2ae2e2b29aaf238feaa9e124248d3f48f9fb6db2424949ff901cffbb5e0f0cc1ad6aedb602cd29450751d11c35023677"
+  "private": true
 }
