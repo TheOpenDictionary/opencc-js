@@ -210,3 +210,4 @@ $RECYCLE.BIN/
 
 ./dist
 ./data
+./coverage
