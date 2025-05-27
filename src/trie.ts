@@ -13,23 +13,28 @@ export class Trie {
 
   /**
    * Add a word to the trie
-   * @param s The string to match
-   * @param v The string to replace with
+   * @param sourceText The string to match
+   * @param replacementText The string to replace with
    */
-  addWord(s: string, v: string): void {
-    let map = this.map;
-    for (const c of s) {
-      const cp = c.codePointAt(0) as number;
-      const nextMap = map.get(cp);
-      if (nextMap == null) {
-        const tmp = new Map() as TrieMap;
-        map.set(cp, tmp);
-        map = tmp;
+  addWord(sourceText: string, replacementText: string): void {
+    let currentMap = this.map;
+
+    // Traverse through each character, creating trie nodes as needed
+    for (const character of sourceText) {
+      const codePoint = character.codePointAt(0) as number;
+      const existingNode = currentMap.get(codePoint);
+
+      if (existingNode == null) {
+        const newNode = new Map() as TrieMap;
+        currentMap.set(codePoint, newNode);
+        currentMap = newNode;
       } else {
-        map = nextMap;
+        currentMap = existingNode;
       }
     }
-    map.trie_val = v;
+
+    // Store the replacement value at the end of the word path
+    currentMap.trie_val = replacementText;
   }
 
   /**
@@ -54,52 +59,66 @@ export class Trie {
 
   /**
    * Convert a string using the trie
-   * @param s The string to convert
+   * @param inputString The string to convert
    */
-  convert(s: string): string {
-    const t = this.map;
-    const n = s.length,
-      arr: string[] = [];
-    let orig_i: number | null = null;
-    for (let i = 0; i < n; ) {
-      let t_curr: TrieMap = t,
-        k = 0,
-        v: string | undefined;
-      for (let j = i; j < n; ) {
-        const x = s.codePointAt(j) as number;
-        j += x > 0xffff ? 2 : 1;
+  convert(inputString: string): string {
+    const rootMap = this.map;
+    const inputLength = inputString.length;
+    const resultParts: string[] = [];
+    let unconvertedStartIndex: number | null = null;
 
-        const t_next = t_curr.get(x);
-        if (typeof t_next === "undefined") {
-          break;
+    for (let currentIndex = 0; currentIndex < inputLength; ) {
+      let currentTrieNode: TrieMap = rootMap;
+      let longestMatchEndIndex = 0;
+      let longestMatchValue: string | undefined;
+
+      // Find the longest matching pattern starting at currentIndex
+      for (let searchIndex = currentIndex; searchIndex < inputLength; ) {
+        const codePoint = inputString.codePointAt(searchIndex) as number;
+        // Move to next character (handling surrogate pairs for Unicode)
+        searchIndex += codePoint > 0xffff ? 2 : 1;
+
+        const nextTrieNode = currentTrieNode.get(codePoint);
+        if (typeof nextTrieNode === "undefined") {
+          break; // No more matches possible
         }
-        t_curr = t_next;
+        currentTrieNode = nextTrieNode;
 
-        const v_curr = t_curr.trie_val;
-        if (typeof v_curr !== "undefined") {
-          k = j;
-          v = v_curr;
+        // Check if current node has a replacement value
+        const currentNodeValue = currentTrieNode.trie_val;
+        if (typeof currentNodeValue !== "undefined") {
+          longestMatchEndIndex = searchIndex;
+          longestMatchValue = currentNodeValue;
         }
       }
-      if (k > 0) {
-        // Replacement found
-        if (orig_i !== null) {
-          arr.push(s.slice(orig_i, i));
-          orig_i = null;
+
+      if (longestMatchEndIndex > 0) {
+        // Found a replacement - process any unconverted text first
+        if (unconvertedStartIndex !== null) {
+          resultParts.push(
+            inputString.slice(unconvertedStartIndex, currentIndex),
+          );
+          unconvertedStartIndex = null;
         }
-        arr.push(v as string);
-        i = k;
+        // Add the replacement text
+        resultParts.push(longestMatchValue as string);
+        currentIndex = longestMatchEndIndex;
       } else {
-        // No replacement
-        if (orig_i === null) {
-          orig_i = i;
+        // No replacement found - mark start of unconverted section
+        if (unconvertedStartIndex === null) {
+          unconvertedStartIndex = currentIndex;
         }
-        i += (s.codePointAt(i) as number) > 0xffff ? 2 : 1;
+        // Move to next character (handling surrogate pairs)
+        const codePoint = inputString.codePointAt(currentIndex) as number;
+        currentIndex += codePoint > 0xffff ? 2 : 1;
       }
     }
-    if (orig_i !== null) {
-      arr.push(s.slice(orig_i, n));
+
+    // Add any remaining unconverted text
+    if (unconvertedStartIndex !== null) {
+      resultParts.push(inputString.slice(unconvertedStartIndex, inputLength));
     }
-    return arr.join("");
+
+    return resultParts.join("");
   }
 }

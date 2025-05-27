@@ -32,11 +32,9 @@
     "prepare-data": "bun scripts/download-data.ts && bun scripts/build-locales.ts",
     "build": "tsup src --outDir dist --format esm --dts",
     "bench": "bun scripts/benchmark.ts", 
-    "test": "vitest run",
+    "prepare": "bun prepare-data && bun build",
+    "test": "bun prepare-data && vitest run",
     "test:coverage": "vitest run --coverage",
-    "dev": "vite",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit --skipLibCheck",
     "clean": "rm -rf dist"
   },
   "repository": {
