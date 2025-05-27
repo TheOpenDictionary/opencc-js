@@ -1,57 +1,39 @@
 {
-  "name": "opencc-js",
-  "version": "1.0.5",
+  "name": "@odict/opencc-js",
+  "version": "1.1.0",
   "description": "The JavaScript version of Open Chinese Convert (OpenCC)",
   "type": "module",
-  "main": "./dist/main.js",
-  "module": "./dist/main.mjs",
+  "module": "./dist/main.js",
   "types": "./dist/main.d.ts",
+  "files": ["dist", "README.md"],
   "exports": {
-    ".": {
-      "types": "./dist/main.d.ts",
-      "import": "./dist/main.mjs",
-      "require": "./dist/main.js"
-    },
     "./cn2t": {
       "types": "./dist/cn2t.d.ts",
-      "import": "./dist/cn2t.mjs",
-      "require": "./dist/cn2t.js"
+      "import": "./dist/cn2t.js"
     },
     "./t2cn": {
       "types": "./dist/t2cn.d.ts",
-      "import": "./dist/t2cn.mjs",
-      "require": "./dist/t2cn.js"
+      "import": "./dist/t2cn.js"
     },
     "./full": {
       "types": "./dist/full.d.ts",
-      "import": "./dist/full.mjs",
-      "require": "./dist/full.js"
+      "import": "./dist/full.js"
     }
   },
   "scripts": {
-    "prepare-data": "node --loader ts-node/esm build.ts",
-    "build:main": "vite build",
-    "build:cn2t": "vite build --config vite.cn2t.config.ts",
-    "build:t2cn": "vite build --config vite.t2cn.config.ts",
-    "build:full": "vite build --config vite.full.config.ts",
-    "build:types": "tsc --emitDeclarationOnly --skipLibCheck",
-    "build": "pnpm prepare-data && pnpm build:main && pnpm build:cn2t && pnpm build:t2cn && pnpm build:full && pnpm build:types",
-    "test:node": "vitest run --environment node test/basic.test.ts",
-    "test:browser": "vitest run --environment jsdom test/browser.test.ts",
-    "test:deno": "deno test --allow-read test/deno/",
-    "test": "pnpm test:node",
-    "test:all": "pnpm test:node && pnpm test:browser && pnpm test:deno",
+    "prepare-data": "bun scripts/download-data.ts && bun scripts/build-locales.ts",
+    "build": "tsup src --outDir dist --format esm --dts",
+    "bench": "bun scripts/benchmark.ts",
+    "prepare": "bun prepare-data && bun run build",
+    "test": "bun prepare-data && vitest run",
     "test:coverage": "vitest run --coverage",
-    "dev": "vite",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit --skipLibCheck",
     "clean": "rm -rf dist"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nk2028/opencc-js.git"
+    "url": "git+https://github.com/TheOpenDictionary/opencc-js.git"
   },
-  "author": "The nk2028 Project",
+  "author": "The Open Dictionary",
   "keywords": [
     "opencc",
     "Chinese",
@@ -66,21 +48,18 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nk2028/opencc-js/issues"
+    "url": "https://github.com/TheOpenDictionary/opencc-js/issues"
   },
-  "homepage": "https://github.com/nk2028/opencc-js#readme",
+  "homepage": "https://github.com/TheOpenDictionary/opencc-js",
   "devDependencies": {
-    "@types/node": "^22.14.1",
-    "@vitest/browser": "^3.1.1",
-    "@vitest/coverage-v8": "^3.1.1",
-    "chai": "~4.3.10",
+    "@types/bun": "^1.2.14",
+    "@types/node": "^22.15.21",
     "jsdom": "^26.1.0",
-    "opencc-data": "~1.0.8",
-    "rollup-plugin-generate-package-json": "^3.2.0",
-    "ts-node": "^10.9.2",
+    "prettier": "^3.5.3",
+    "tsup": "^8.5.0",
     "typescript": "^5.8.3",
-    "vite": "^6.2.6",
-    "vitest": "^3.1.1"
+    "vite": "^6.3.5",
+    "vitest": "^3.1.4"
   },
-  "packageManager": "pnpm@10.8.1+sha512.c50088ba998c67b8ca8c99df8a5e02fd2ae2e2b29aaf238feaa9e124248d3f48f9fb6db2424949ff901cffbb5e0f0cc1ad6aedb602cd29450751d11c35023677"
+  "private": true
 }

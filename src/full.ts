@@ -1,6 +1,7 @@
-import { Trie, ConverterFactory, ConverterBuilder, CustomConverter, HTMLConverter } from "./main.ts";
-import * as Locale from "../dist/esm-lib/preset/full.js";
+import { buildConverterFactory } from "./converter.ts";
 
-const Converter = ConverterBuilder(Locale);
+import * as Locale from "../data/preset/full.js";
 
-export { Trie, ConverterFactory, Converter, CustomConverter, HTMLConverter, Locale };
+const createConverter = buildConverterFactory(Locale);
+
+export { createConverter, Locale };
