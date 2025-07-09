@@ -18,3 +18,13 @@ export interface ConverterOptions {
   from: string;
   to: string;
 }
+
+/**
+ * Converter function type
+ */
+export type Converter = (text: string) => string;
+
+/**
+ * Converter factory type
+ */
+export type ConverterFactory = (options: ConverterOptions) => Converter;

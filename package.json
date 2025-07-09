@@ -5,7 +5,10 @@
   "type": "module",
   "module": "./dist/main.js",
   "types": "./dist/main.d.ts",
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "exports": {
     "./cn2t": {
       "types": "./dist/cn2t.d.ts",
@@ -22,12 +25,13 @@
   },
   "scripts": {
     "prepare-data": "bun scripts/download-data.ts && bun scripts/build-locales.ts",
-    "build": "tsup src --outDir dist --format esm --dts",
+    "build": "bunup",
     "bench": "bun scripts/benchmark.ts",
     "prepare": "bun prepare-data && bun run build",
     "test": "bun prepare-data && vitest run",
     "test:coverage": "vitest run --coverage",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "dev": "bunup --watch"
   },
   "repository": {
     "type": "git",
@@ -52,13 +56,10 @@
   },
   "homepage": "https://github.com/TheOpenDictionary/opencc-js",
   "devDependencies": {
-    "@types/bun": "^1.2.14",
-    "@types/node": "^22.15.21",
+    "@biomejs/biome": "^2.1.1",
+    "@types/bun": "^1.2.18",
+    "bunup": "^0.8.60",
     "jsdom": "^26.1.0",
-    "prettier": "^3.5.3",
-    "tsup": "^8.5.0",
-    "typescript": "^5.8.3",
-    "vite": "^6.3.5",
-    "vitest": "^3.1.4"
+    "typescript": "^5.8.3"
   }
 }
