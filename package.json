@@ -61,7 +61,6 @@
 		"@types/bun": "^1.2.18",
 		"bunup": "^0.8.60",
 		"husky": "^9.1.7",
-		"jsdom": "^26.1.0",
 		"lint-staged": "^16.1.2",
 		"typescript": "^5.8.3"
 	}
