@@ -27,7 +27,7 @@
 		"prepare-data": "bun scripts/download-data.ts && bun scripts/build-locales.ts",
 		"build": "bunup",
 		"bench": "bun scripts/benchmark.ts",
-		"prepare": "husky",
+		"prepare": "husky && bun prepare-data && bun run build",
 		"test": "bun prepare-data && vitest run",
 		"test:coverage": "vitest run --coverage",
 		"fix": "biome check --fix",
@@ -61,7 +61,6 @@
 		"@types/bun": "^1.2.18",
 		"bunup": "^0.8.60",
 		"husky": "^9.1.7",
-		"lint-staged": "^16.1.2",
 		"typescript": "^5.8.3"
 	}
 }

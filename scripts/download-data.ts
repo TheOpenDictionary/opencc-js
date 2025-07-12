@@ -9,7 +9,7 @@ const fileContentCache = new Map<string, string>();
 
 async function downloadFile(fileName: string): Promise<string> {
 	const contents = await fetch(
-		`https://raw.githubusercontent.com/transcrobes/opencc-data/refs/heads/main/data/${fileName}.txt`,
+		`https://raw.githubusercontent.com/TheOpenDictionary/opencc-data/refs/heads/main/data/${fileName}.txt`,
 	)
 		.then((response) => {
 			if (response.status !== 200) {

@@ -1,3 +1,3 @@
-import JPVariants from "../dict/JPVariants.ts";
+import JPVariants from '../dict/JPVariants.ts';
 
 export default [JPVariants];

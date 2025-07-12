@@ -1,1 +1,1 @@
-lint-staged && bun test
+bun fix --no-errors-on-unmatched --staged && bun test

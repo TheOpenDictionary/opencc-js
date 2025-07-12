@@ -10,6 +10,6 @@ export const standard2variants: Record<string, string[]> = {
 	cn: ["TSCharacters", "TSPhrases"],
 	hk: ["HKVariants"],
 	tw: ["TWVariants"],
-	twp: ["TWVariants", "TWPhrasesIT", "TWPhrasesName", "TWPhrasesOther"],
+	twp: ["TWVariants", "TWPhrases", "TWPhrasesName", "TWPhrasesOther"],
 	jp: ["JPVariants"],
 };
