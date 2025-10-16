@@ -1,4 +1,4 @@
-import * as Locale from "../data/preset/t2cn.js";
+import * as Locale from "../data/preset/full.js";
 
 import { Converter as BaseConverter } from "./converter.ts";
 import type { ConverterOptions } from "./types.ts";

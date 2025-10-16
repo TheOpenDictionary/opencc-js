@@ -1,8 +1,10 @@
 import * as Locale from "../data/preset/cn2t.js";
 
-import { buildConverterFactory } from "./converter.ts";
-import type { ConverterFactory } from "./types.ts";
+import { Converter as BaseConverter } from "./converter.ts";
+import type { ConverterOptions } from "./types.ts";
 
-const createConverter: ConverterFactory = buildConverterFactory(Locale);
-
-export { createConverter, Locale };
+export class Converter extends BaseConverter<typeof Locale> {
+	constructor(options: ConverterOptions<typeof Locale>) {
+		super(Locale, options);
+	}
+}
