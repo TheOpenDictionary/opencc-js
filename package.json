@@ -9,28 +9,20 @@
   ],
   "exports": {
     "./cn2t": {
-      "import": "./dist/cn2t.js",
-      "types": "./dist/cn2t.d.ts"
+      "import": "./dist/src/cn2t.js",
+      "types": "./dist/src/cn2t.d.ts"
     },
     "./t2cn": {
-      "import": "./dist/t2cn.js",
-      "types": "./dist/t2cn.d.ts"
+      "import": "./dist/src/t2cn.js",
+      "types": "./dist/src/t2cn.d.ts"
     },
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
     }
   },
   "scripts": {
-    "prepare-data": "bun scripts/download-data.ts && bun scripts/build-locales.ts",
-    "build": "bunup",
-    "bench": "bun scripts/benchmark.ts",
-    "prepare": "husky && bun prepare-data && bun run build",
-    "test": "bun prepare-data && bun test",
-    "test:coverage": "vitest run --coverage",
-    "fix": "biome check --fix",
-    "clean": "rm -rf dist",
-    "dev": "bunup --watch"
+    "prepare": "bun x husky"
   },
   "repository": {
     "type": "git",
@@ -59,6 +51,7 @@
     "@types/bun": "^1.3.0",
     "bunup": "^0.14.20",
     "husky": "^9.1.7",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "@typescript/native-preview": "^7.0.0-dev.20251015.1"
   }
 }

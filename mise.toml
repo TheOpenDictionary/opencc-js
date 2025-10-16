@@ -1,2 +1,42 @@
 [tools]
 bun = "latest"
+
+[tasks.download]
+hide = true
+run = "bun scripts/download-data.ts"
+
+[tasks.prepare]
+hide = true
+depends = ["download", "locales"]
+
+[tasks.locales]
+hide = true
+run = "bun scripts/build-locales.ts"
+
+[tasks.tsc]
+hide = true
+run = "bun x tsgo --project tsconfig.build.json"
+
+[tasks.clean]
+run = "rm -rf dist"
+
+[tasks.js]
+hide = true
+run = "bun build.ts"
+
+[tasks.build]
+depends = ["prepare", "clean"]
+run = [{ tasks = ["tsc", "js"] }]
+
+[tasks.test]
+run = "bun test"
+
+[tasks.fix]
+run = "bun x biome check --fix"
+
+[tasks.bench]
+run = "bun scripts/benchmark.ts"
+
+[tasks.publish]
+depends = ["build"]
+run = "bun publish"
